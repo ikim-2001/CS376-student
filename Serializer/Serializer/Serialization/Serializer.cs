@@ -190,7 +190,7 @@ namespace Assets.Serialization
             switch (o)
             {
                 case null:
-                    throw new NotImplementedException("Fill me in");
+                    Write()
                     break;
 
                 case int i:
@@ -231,7 +231,16 @@ namespace Assets.Serialization
         /// <param name="o">Object to serialize</param>
         private void WriteComplexObject(object o)
         {
-            throw new NotImplementedException("Fill me in");
+            var (id, isNew) = getID(o);
+            write(#id)
+            if (isNew) {
+                    WriteBracketedExpression("{", () => {
+                        WriteField("type", o.GetType().Name, true);
+                        foreach (var (key, value) in Utilities.SerializedFields(o)){
+                            WriteField(key, value, false);
+                        }
+                        } ,"}")
+            }
         }
     }
 }
